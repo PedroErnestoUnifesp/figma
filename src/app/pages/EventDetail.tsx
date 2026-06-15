@@ -24,7 +24,7 @@ export function EventDetail() {
     <Box sx={{ minHeight: '100vh', bgcolor: theme.palette.background.default }}>
       <Box sx={{ height: 200, bgcolor: categoryColors[event.category], color: 'white', position: 'relative', display: 'flex', flexDirection: 'column' }}>
         <Box sx={{ p: 2 }}>
-          <IconButton onClick={() => navigate('/')} sx={{ color: 'white', mb: 2 }}><ArrowBack /></IconButton>
+          <IconButton onClick={() => navigate(-1)} sx={{ color: 'white', mb: 2 }}><ArrowBack /></IconButton>
         </Box>
         <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', px: 3 }}>
           <Box>

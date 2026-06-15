@@ -23,7 +23,7 @@ export function VenueDetail() {
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: theme.palette.background.default }}>
       <Box sx={{ bgcolor: '#ff4e00', color: 'white', p: 2 }}>
-        <IconButton onClick={() => navigate('/')} sx={{ color: 'white', mb: 1 }}><ArrowBack /></IconButton>
+        <IconButton onClick={() => navigate(-1)} sx={{ color: 'white', mb: 1 }}><ArrowBack /></IconButton>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
           <Box sx={{ width: 80, height: 80, bgcolor: 'rgba(255,255,255,0.2)', borderRadius: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 40 }}>
             {venue.type === 'park' && '🌳'}
