@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { Box, Typography, Card, CardContent, Chip, IconButton, useTheme } from '@mui/material';
-import { AccessTime, LocationOn, Visibility, ChevronRight } from '@mui/icons-material';
+import { AccessTime, LocationOn, Visibility, ChevronRight, BookmarkBorder, CheckCircle } from '@mui/icons-material';
 import { useNavigate } from 'react-router';
 import { events, venues } from '../data/mockData';
 
@@ -14,9 +15,33 @@ const venueTypeLabels: Record<string, string> = {
   theater: 'Teatro', gallery: 'Galeria', other: 'Outro',
 };
 
+const HamburgerHalfCut = (props: any) => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" {...props}>
+    <line x1="3" y1="6" x2="21" y2="6" />
+    <line x1="3" y1="12" x2="21" y2="12" />
+    <line x1="3" y1="18" x2="13" y2="18" />
+  </svg>
+);
+
 export function Home() {
   const navigate = useNavigate();
   const theme = useTheme();
+  const [bookmarkedIds, setBookmarkedIds] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('saved_event_ids');
+      return saved ? JSON.parse(saved) : ['1', '3'];
+    } catch {
+      return ['1', '3'];
+    }
+  });
+
+  const handleToggleBookmark = (id: string) => {
+    setBookmarkedIds(prev => {
+      const next = prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id];
+      localStorage.setItem('saved_event_ids', JSON.stringify(next));
+      return next;
+    });
+  };
 
   const popularEvents = [...events].sort((a, b) => (b.views || 0) - (a.views || 0)).slice(0, 5);
 
@@ -46,21 +71,41 @@ export function Home() {
                 sx={{
                   height: 140,
                   bgcolor: categoryColors[event.category],
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'white',
                   position: 'relative',
                 }}
               >
-                <Typography variant="h6" sx={{ textAlign: 'center', px: 2 }}>{event.title}</Typography>
                 <Chip
                   label={categoryLabels[event.category]}
                   size="small"
-                  sx={{ position: 'absolute', top: 8, right: 8, bgcolor: 'rgba(255,255,255,0.3)', color: 'white' }}
+                  sx={{ position: 'absolute', top: 12, left: 12, bgcolor: 'rgba(255,255,255,0.3)', color: 'white', fontWeight: 500 }}
                 />
+                <IconButton
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleToggleBookmark(event.id);
+                  }}
+                  sx={{
+                    position: 'absolute',
+                    top: 8,
+                    right: 8,
+                    bgcolor: 'rgba(255,255,255,0.85)',
+                    backdropFilter: 'blur(4px)',
+                    padding: '6px',
+                    '&:hover': { bgcolor: 'rgba(255,255,255,1)' },
+                    zIndex: 10
+                  }}
+                >
+                  {bookmarkedIds.includes(event.id) ? (
+                    <CheckCircle sx={{ color: '#2e7d32', fontSize: 18 }} />
+                  ) : (
+                    <BookmarkBorder sx={{ color: '#ff4e00', fontSize: 18 }} />
+                  )}
+                </IconButton>
               </Box>
               <CardContent sx={{ pb: 2 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', fontSize: '1.05rem', lineHeight: 1.2, mb: 1.5 }}>
+                  {event.title}
+                </Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                   <AccessTime sx={{ fontSize: 16, color: 'text.secondary' }} />
                   <Typography variant="body2" color="text.secondary">
@@ -71,23 +116,24 @@ export function Home() {
                   <LocationOn sx={{ fontSize: 16, color: 'text.secondary' }} />
                   <Typography variant="body2" color="text.secondary" noWrap>{event.location}</Typography>
                 </Box>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    mt: 1.5,
-                    mb: 1.5,
-                    fontSize: '0.85rem',
-                    lineHeight: 1.3,
-                  }}
-                >
-                  {event.description}
-                </Typography>
+                <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start', mt: 1.5, mb: 1.5 }}>
+                  <HamburgerHalfCut sx={{ color: 'text.secondary', fontSize: 16, mt: 0.3, flexShrink: 0 }} />
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      fontSize: '0.85rem',
+                      lineHeight: 1.3,
+                    }}
+                  >
+                    {event.description}
+                  </Typography>
+                </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 1 }}>
                   <Visibility sx={{ fontSize: 14, color: 'text.secondary' }} />
                   <Typography variant="caption" color="text.secondary">{event.views} visualizações</Typography>
