@@ -221,23 +221,24 @@ export function Chat() {
                           <LocationOn sx={{ fontSize: 16, color: 'text.secondary' }} />
                           <Typography variant="body2" color="text.secondary" noWrap>{event.location}</Typography>
                         </Box>
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          sx={{
-                            display: '-webkit-box',
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            mt: 1.5,
-                            mb: 1.5,
-                            fontSize: '0.85rem',
-                            lineHeight: 1.3,
-                          }}
-                        >
-                          {event.description}
-                        </Typography>
+                        <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start', mt: 1.5, mb: 1.5 }}>
+                          <HamburgerHalfCut sx={{ color: 'text.secondary', fontSize: 16, mt: 0.3, flexShrink: 0 }} />
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{
+                              display: '-webkit-box',
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: 'vertical',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              fontSize: '0.85rem',
+                              lineHeight: 1.3,
+                            }}
+                          >
+                            {event.description}
+                          </Typography>
+                        </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 1 }}>
                           <Visibility sx={{ fontSize: 14, color: 'text.secondary' }} />
                           <Typography variant="caption" color="text.secondary">{event.views} visualizações</Typography>
