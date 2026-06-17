@@ -2,10 +2,16 @@ import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import {
   Box, Typography, TextField, IconButton, Paper, Avatar,
-  Chip, Card, CardContent, useTheme,
+  Chip, Card, CardContent, useTheme, SvgIcon
 } from '@mui/material';
-import { ArrowBack, Send, SmartToy, Mic, AccessTime, LocationOn, Visibility } from '@mui/icons-material';
+import { ArrowBack, Send, SmartToy, Mic, AccessTime, LocationOn, Visibility, BookmarkBorder, CheckCircle } from '@mui/icons-material';
 import { events } from '../data/mockData';
+
+const HamburgerHalfCut = (props: any) => (
+  <SvgIcon viewBox="0 0 24 24" {...props}>
+    <path d="M3 6h18M3 12h18M3 18h10" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+  </SvgIcon>
+);
 
 type Message = {
   id: string;
@@ -54,6 +60,24 @@ export function Chat() {
   const [isTyping, setIsTyping] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const [bookmarkedIds, setBookmarkedIds] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('saved_event_ids');
+      return saved ? JSON.parse(saved) : ['1', '3'];
+    } catch {
+      return ['1', '3'];
+    }
+  });
+
+  const handleToggleBookmark = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setBookmarkedIds(prev => {
+      const next = prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id];
+      localStorage.setItem('saved_event_ids', JSON.stringify(next));
+      return next;
+    });
+  };
 
   useEffect(() => {
     try {
@@ -144,25 +168,46 @@ export function Chat() {
                     >
                       <Box
                         sx={{
-                          height: 120,
+                          height: 140,
                           bgcolor: categoryColors[event.category] || '#607d8b',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          color: 'white',
                           position: 'relative',
+                          backgroundImage: event.image ? `url(${event.image})` : 'none',
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
                         }}
                       >
-                        <Typography variant="h6" sx={{ textAlign: 'center', px: 2, fontSize: '1.1rem', fontWeight: 600 }}>
-                          {event.title}
-                        </Typography>
+                        {event.image && (
+                          <Box sx={{ position: 'absolute', inset: 0, bgcolor: 'rgba(0,0,0,0.2)' }} />
+                        )}
                         <Chip
                           label={categoryLabels[event.category]}
                           size="small"
-                          sx={{ position: 'absolute', top: 8, right: 8, bgcolor: 'rgba(255,255,255,0.3)', color: 'white', fontSize: '0.65rem' }}
+                          sx={{ position: 'absolute', top: 12, left: 12, bgcolor: 'rgba(255,255,255,0.3)', color: 'white', fontWeight: 500 }}
                         />
+                        <IconButton
+                          onClick={(e) => handleToggleBookmark(event.id, e)}
+                          sx={{
+                            position: 'absolute',
+                            top: 8,
+                            right: 8,
+                            bgcolor: 'rgba(255,255,255,0.85)',
+                            backdropFilter: 'blur(4px)',
+                            padding: '6px',
+                            '&:hover': { bgcolor: 'rgba(255,255,255,1)' },
+                            zIndex: 10
+                          }}
+                        >
+                          {bookmarkedIds.includes(event.id) ? (
+                            <CheckCircle sx={{ color: '#2e7d32', fontSize: 18 }} />
+                          ) : (
+                            <BookmarkBorder sx={{ color: '#ff4e00', fontSize: 18 }} />
+                          )}
+                        </IconButton>
                       </Box>
                       <CardContent sx={{ pb: 2 }}>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', fontSize: '1.05rem', lineHeight: 1.2, mb: 1.5 }}>
+                          {event.title}
+                        </Typography>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                           <AccessTime sx={{ fontSize: 16, color: 'text.secondary' }} />
                           <Typography variant="body2" color="text.secondary">

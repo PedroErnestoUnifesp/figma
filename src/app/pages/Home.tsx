@@ -45,14 +45,14 @@ export function Home() {
 
   return (
     <Box sx={{ bgcolor: theme.palette.background.default, minHeight: '100%' }}>
-      <Box sx={{ bgcolor: '#ff4e00', color: 'white', p: 3, pb: 4 }}>
+      <Box sx={{ bgcolor: '#ff4e00', color: 'white', p: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'sticky', top: 0, zIndex: 1100 }}>
         <Typography variant="h5" sx={{ mb: 0.5 }}>Olá! 👋</Typography>
         <Typography variant="body2" sx={{ opacity: 0.9 }}>
           Descubra eventos incríveis na sua cidade
         </Typography>
       </Box>
 
-      <Box sx={{ p: 2, mt: -2 }}>
+      <Box sx={{ p: 2 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
           <Typography variant="h6">Eventos Populares</Typography>
           <Visibility sx={{ color: 'text.secondary', fontSize: 20 }} />
@@ -70,8 +70,14 @@ export function Home() {
                   height: 140,
                   bgcolor: categoryColors[event.category],
                   position: 'relative',
+                  backgroundImage: event.image ? `url(${event.image})` : 'none',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
                 }}
               >
+                {event.image && (
+                  <Box sx={{ position: 'absolute', inset: 0, bgcolor: 'rgba(0,0,0,0.2)' }} />
+                )}
                 <Chip
                   label={categoryLabels[event.category]}
                   size="small"
@@ -158,14 +164,17 @@ export function Home() {
                       width: 120, minHeight: 120, bgcolor: '#ff4e00',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       color: 'white', fontSize: 40,
+                      backgroundImage: venue.image ? `url(${venue.image})` : 'none',
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
                     }}
                   >
-                    {venue.type === 'park' && '🌳'}
-                    {venue.type === 'cultural-center' && '🎭'}
-                    {venue.type === 'event-center' && '🎪'}
-                    {venue.type === 'theater' && '🎬'}
-                    {venue.type === 'gallery' && '🖼️'}
-                    {venue.type === 'other' && '📍'}
+                    {!venue.image && venue.type === 'park' && '🌳'}
+                    {!venue.image && venue.type === 'cultural-center' && '🎭'}
+                    {!venue.image && venue.type === 'event-center' && '🎪'}
+                    {!venue.image && venue.type === 'theater' && '🎬'}
+                    {!venue.image && venue.type === 'gallery' && '🖼️'}
+                    {!venue.image && venue.type === 'other' && '📍'}
                   </Box>
                   <CardContent sx={{ flex: 1, position: 'relative', pr: 5 }}>
                     <Typography variant="subtitle1" sx={{ mb: 0.5 }}>{venue.name}</Typography>

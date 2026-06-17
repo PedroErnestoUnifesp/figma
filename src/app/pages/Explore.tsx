@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -9,9 +9,12 @@ import {
   Chip,
   TextField,
   InputAdornment,
+  IconButton,
+  SvgIcon,
 } from '@mui/material';
-import { Search, AccessTime, LocationOn } from '@mui/icons-material';
+import { Search, AccessTime, LocationOn, Visibility, BookmarkBorder, CheckCircle } from '@mui/icons-material';
 import { events } from '../data/mockData';
+import { useNavigate } from 'react-router';
 
 const categoryLabels: Record<string, string> = {
   music: 'Música',
@@ -31,9 +34,37 @@ const categoryColors: Record<string, string> = {
   other: '#607d8b',
 };
 
+const HamburgerHalfCut = (props: any) => (
+  <SvgIcon viewBox="0 0 24 24" {...props}>
+    <path d="M3 6h18M3 12h18M3 18h10" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+  </SvgIcon>
+);
+
 export function Explore() {
+  const navigate = useNavigate();
   const [category, setCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [bookmarkedIds, setBookmarkedIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('saved_event_ids');
+      if (saved) {
+        setBookmarkedIds(JSON.parse(saved));
+      }
+    } catch {
+      //
+    }
+  }, []);
+
+  const handleToggleBookmark = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setBookmarkedIds(prev => {
+      const next = prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id];
+      localStorage.setItem('saved_event_ids', JSON.stringify(next));
+      return next;
+    });
+  };
 
   const filteredEvents = events.filter((event) => {
     const matchesCategory = category === 'all' || event.category === category;
@@ -111,48 +142,81 @@ export function Explore() {
         ) : (
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             {sortedEvents.map((event) => (
-              <Card key={event.id}>
+              <Card key={event.id} onClick={() => navigate(`/event/${event.id}`)} sx={{ cursor: 'pointer', transition: 'transform 0.2s', '&:hover': { transform: 'scale(1.02)' } }}>
                 <Box
                   sx={{
-                    height: 6,
+                    height: 140,
                     bgcolor: categoryColors[event.category],
+                    position: 'relative',
+                    backgroundImage: event.image ? `url(${event.image})` : 'none',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
                   }}
-                />
-                <CardContent>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', mb: 2 }}>
-                    <Typography variant="h6" sx={{ flex: 1 }}>
-                      {event.title}
-                    </Typography>
-                    <Chip
-                      label={categoryLabels[event.category]}
-                      size="small"
-                      sx={{
-                        bgcolor: categoryColors[event.category],
-                        color: 'white',
-                      }}
-                    />
-                  </Box>
-
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                    <AccessTime sx={{ fontSize: 18, color: 'text.secondary' }} />
-                    <Typography variant="body2" color="text.secondary">
-                      {new Date(event.date).toLocaleDateString('pt-BR', {
-                        day: '2-digit',
-                        month: 'long',
-                      })} às {event.time}
-                    </Typography>
-                  </Box>
-
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-                    <LocationOn sx={{ fontSize: 18, color: 'text.secondary' }} />
-                    <Typography variant="body2" color="text.secondary">
-                      {event.location}
-                    </Typography>
-                  </Box>
-
-                  <Typography variant="body2" color="text.secondary">
-                    {event.description}
+                >
+                  {event.image && (
+                    <Box sx={{ position: 'absolute', inset: 0, bgcolor: 'rgba(0,0,0,0.2)' }} />
+                  )}
+                  <Chip
+                    label={categoryLabels[event.category]}
+                    size="small"
+                    sx={{ position: 'absolute', top: 12, left: 12, bgcolor: 'rgba(255,255,255,0.3)', color: 'white', fontWeight: 500 }}
+                  />
+                  <IconButton
+                    onClick={(e) => handleToggleBookmark(event.id, e)}
+                    sx={{
+                      position: 'absolute',
+                      top: 8,
+                      right: 8,
+                      bgcolor: 'rgba(255,255,255,0.85)',
+                      backdropFilter: 'blur(4px)',
+                      padding: '6px',
+                      '&:hover': { bgcolor: 'rgba(255,255,255,1)' },
+                      zIndex: 10
+                    }}
+                  >
+                    {bookmarkedIds.includes(event.id) ? (
+                      <CheckCircle sx={{ color: '#2e7d32', fontSize: 18 }} />
+                    ) : (
+                      <BookmarkBorder sx={{ color: '#ff4e00', fontSize: 18 }} />
+                    )}
+                  </IconButton>
+                </Box>
+                <CardContent sx={{ pb: 2 }}>
+                  <Typography variant="subtitle1" sx={{ fontWeight: 'bold', fontSize: '1.05rem', lineHeight: 1.2, mb: 1.5 }}>
+                    {event.title}
                   </Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                    <AccessTime sx={{ fontSize: 16, color: 'text.secondary' }} />
+                    <Typography variant="body2" color="text.secondary">
+                      {new Date(event.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })} às {event.time}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                    <LocationOn sx={{ fontSize: 16, color: 'text.secondary' }} />
+                    <Typography variant="body2" color="text.secondary" noWrap>{event.location}</Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start', mt: 1.5, mb: 1.5 }}>
+                    <HamburgerHalfCut sx={{ color: 'text.secondary', fontSize: 16, mt: 0.3, flexShrink: 0 }} />
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        fontSize: '0.85rem',
+                        lineHeight: 1.3,
+                      }}
+                    >
+                      {event.description}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 1 }}>
+                    <Visibility sx={{ fontSize: 14, color: 'text.secondary' }} />
+                    <Typography variant="caption" color="text.secondary">{event.views} visualizações</Typography>
+                  </Box>
                 </CardContent>
               </Card>
             ))}

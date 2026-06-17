@@ -1,5 +1,16 @@
 import { Event, Venue } from '../App';
 
+import artesanatoImg from '../../images/artesanato.jpg';
+import cassianoRicardoImg from '../../images/cassiano-ricardo.jpg';
+import contemporaneaImg from '../../images/contemporanea.jpg';
+import gastronomiaImg from '../../images/gastronomia.jpg';
+import guitarristaImg from '../../images/guitarrista.jpg';
+import jazzImg from '../../images/jazz.jpg';
+import parqueDaCidadeImg from '../../images/parque-da-cidade.jpg';
+import sescImg from '../../images/sesc.jpg';
+import teatroUnivapImg from '../../images/teatro-univap.jpg';
+import valeSulShoppingImg from '../../images/vale-sul-shopping.jpg';
+
 export const venues: Venue[] = [
   {
     id: '1',
@@ -8,6 +19,7 @@ export const venues: Venue[] = [
     address: 'Avenida Central, 1000',
     description: 'Espaço verde com palco ao ar livre para eventos culturais',
     eventCount: 12,
+    image: parqueDaCidadeImg,
   },
   {
     id: '2',
@@ -16,6 +28,7 @@ export const venues: Venue[] = [
     address: 'Rua das Artes, 500',
     description: 'Centro dedicado às artes e cultura da cidade',
     eventCount: 18,
+    image: cassianoRicardoImg,
   },
   {
     id: '3',
@@ -24,6 +37,7 @@ export const venues: Venue[] = [
     address: 'Avenida Principal, 2000',
     description: 'Complexo moderno para grandes eventos e festivais',
     eventCount: 8,
+    image: valeSulShoppingImg,
   },
   {
     id: '4',
@@ -32,6 +46,7 @@ export const venues: Venue[] = [
     address: 'Praça da República, 100',
     description: 'Teatro histórico com programação variada',
     eventCount: 15,
+    image: teatroUnivapImg,
   },
   {
     id: '5',
@@ -40,6 +55,7 @@ export const venues: Venue[] = [
     address: 'Rua dos Artistas, 300',
     description: 'Exposições de arte contemporânea e workshops',
     eventCount: 10,
+    image: sescImg,
   },
 ];
 
@@ -55,6 +71,7 @@ export const events: Event[] = [
     organizer: 'Associação Musical',
     venueId: '1',
     views: 1250,
+    image: jazzImg,
   },
   {
     id: '2',
@@ -67,6 +84,7 @@ export const events: Event[] = [
     organizer: 'Galeria Central',
     venueId: '5',
     views: 980,
+    image: contemporaneaImg,
   },
   {
     id: '3',
@@ -79,6 +97,7 @@ export const events: Event[] = [
     organizer: 'Gourmet City',
     venueId: '3',
     views: 2100,
+    image: gastronomiaImg,
   },
   {
     id: '4',
@@ -91,6 +110,7 @@ export const events: Event[] = [
     organizer: 'Cia Teatral',
     venueId: '4',
     views: 850,
+    image: teatroUnivapImg,
   },
   {
     id: '5',
@@ -103,6 +123,7 @@ export const events: Event[] = [
     organizer: 'Escola de Artes',
     venueId: '2',
     views: 620,
+    image: artesanatoImg,
   },
   {
     id: '6',
@@ -115,6 +136,7 @@ export const events: Event[] = [
     organizer: 'Rock Cultura',
     venueId: '1',
     views: 1580,
+    image: guitarristaImg,
   },
   {
     id: '7',
@@ -127,6 +149,7 @@ export const events: Event[] = [
     organizer: 'Grupo Movimento',
     venueId: '2',
     views: 720,
+    image: contemporaneaImg,
   },
   {
     id: '8',
@@ -139,5 +162,6 @@ export const events: Event[] = [
     organizer: 'Associação de Artesãos',
     venueId: '1',
     views: 1100,
+    image: artesanatoImg,
   },
 ];
