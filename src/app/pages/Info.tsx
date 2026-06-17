@@ -24,7 +24,7 @@ export function Info() {
         <Card sx={{ mb: 2, textAlign: 'center' }}>
           <CardContent sx={{ py: 3 }}>
             <Typography variant="h4" sx={{ color: '#ff4e00', mb: 0.5 }}>🎭</Typography>
-            <Typography variant="h6">Eventos Culturais</Typography>
+            <Typography variant="h6">Sayd Kazah</Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
               Versão 1.0.0
             </Typography>
