@@ -21,18 +21,14 @@ export function SavedEvents() {
   const navigate = useNavigate();
   const theme = useTheme();
 
-  const [bookmarkedIds, setBookmarkedIds] = useState<string[]>([]);
-
-  useEffect(() => {
+  const [bookmarkedIds, setBookmarkedIds] = useState<string[]>(() => {
     try {
       const saved = localStorage.getItem('saved_event_ids');
-      if (saved) {
-        setBookmarkedIds(JSON.parse(saved));
-      }
+      return saved ? JSON.parse(saved) : ['1', '3'];
     } catch {
-      // ignore
+      return ['1', '3'];
     }
-  }, []);
+  });
 
   const handleToggleBookmark = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();

@@ -32,7 +32,8 @@ export function Root() {
   const navigate = useNavigate();
   const location = useLocation();
   const theme = useTheme();
-  const { darkMode } = useThemeMode();
+  const { darkMode, userName } = useThemeMode();
+  const initialLetter = userName.trim().charAt(0).toUpperCase() || 'U';
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const getNavValue = () => {
@@ -220,10 +221,10 @@ export function Root() {
             }}
           >
             <Avatar sx={{ bgcolor: 'rgba(255,255,255,0.25)', border: '2px solid rgba(255,255,255,0.5)' }}>
-              U
+              {initialLetter}
             </Avatar>
             <Box sx={{ flex: 1 }}>
-              <Typography variant="subtitle1" sx={{ lineHeight: 1.2 }}>Usuário</Typography>
+              <Typography variant="subtitle1" sx={{ lineHeight: 1.2 }}>{userName}</Typography>
               <Typography variant="caption" sx={{ opacity: 0.85 }}>São Paulo, SP</Typography>
             </Box>
             <IconButton onClick={() => setDrawerOpen(false)} sx={{ color: 'white', p: 0.5 }}>
@@ -242,7 +243,12 @@ export function Root() {
                 <ListItemIcon sx={{ minWidth: 44 }}>
                   <Bookmark sx={{ color: '#ff4e00' }} />
                 </ListItemIcon>
-                <ListItemText primary="Favoritos" secondary="Ver eventos salvos" />
+                <ListItemText
+                  primary="Favoritos"
+                  secondary="Ver eventos salvos"
+                  primaryTypographyProps={{ sx: { color: darkMode ? 'white' : 'text.primary' } }}
+                  secondaryTypographyProps={{ sx: { color: darkMode ? 'rgba(255,255,255,0.7)' : 'text.secondary' } }}
+                />
               </ListItemButton>
             </ListItem>
 
@@ -256,7 +262,12 @@ export function Root() {
                 <ListItemIcon sx={{ minWidth: 44 }}>
                   <Person sx={{ color: '#ff4e00' }} />
                 </ListItemIcon>
-                <ListItemText primary="Perfil" secondary="Ver e editar perfil" />
+                <ListItemText
+                  primary="Perfil"
+                  secondary="Ver e editar perfil"
+                  primaryTypographyProps={{ sx: { color: darkMode ? 'white' : 'text.primary' } }}
+                  secondaryTypographyProps={{ sx: { color: darkMode ? 'rgba(255,255,255,0.7)' : 'text.secondary' } }}
+                />
               </ListItemButton>
             </ListItem>
 
@@ -270,7 +281,12 @@ export function Root() {
                 <ListItemIcon sx={{ minWidth: 44 }}>
                   <Settings sx={{ color: '#ff4e00' }} />
                 </ListItemIcon>
-                <ListItemText primary="Configurações" secondary="Aparência e preferências" />
+                <ListItemText
+                  primary="Configurações"
+                  secondary="Aparência e preferências"
+                  primaryTypographyProps={{ sx: { color: darkMode ? 'white' : 'text.primary' } }}
+                  secondaryTypographyProps={{ sx: { color: darkMode ? 'rgba(255,255,255,0.7)' : 'text.secondary' } }}
+                />
               </ListItemButton>
             </ListItem>
 
@@ -284,7 +300,12 @@ export function Root() {
                 <ListItemIcon sx={{ minWidth: 44 }}>
                   <Info sx={{ color: '#ff4e00' }} />
                 </ListItemIcon>
-                <ListItemText primary="Informações" secondary="Sobre o aplicativo" />
+                <ListItemText
+                  primary="Informações"
+                  secondary="Sobre o aplicativo"
+                  primaryTypographyProps={{ sx: { color: darkMode ? 'white' : 'text.primary' } }}
+                  secondaryTypographyProps={{ sx: { color: darkMode ? 'rgba(255,255,255,0.7)' : 'text.secondary' } }}
+                />
               </ListItemButton>
             </ListItem>
           </List>

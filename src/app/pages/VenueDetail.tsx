@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { Box, Typography, Card, CardContent, IconButton, Chip, useTheme } from '@mui/material';
+import { Box, Typography, Card, CardContent, IconButton, Chip, useTheme, SvgIcon } from '@mui/material';
 import { ArrowBack, AccessTime, LocationOn, Person, Visibility, BookmarkBorder, CheckCircle } from '@mui/icons-material';
 import { events, venues } from '../data/mockData';
 
@@ -12,11 +12,9 @@ const categoryLabels: Record<string, string> = {
 };
 
 const HamburgerHalfCut = (props: any) => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" {...props}>
-    <line x1="3" y1="6" x2="21" y2="6" />
-    <line x1="3" y1="12" x2="21" y2="12" />
-    <line x1="3" y1="18" x2="13" y2="18" />
-  </svg>
+  <SvgIcon viewBox="0 0 24 24" {...props}>
+    <path d="M3 6h18M3 12h18M3 18h10" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+  </SvgIcon>
 );
 
 export function VenueDetail() {
@@ -143,8 +141,8 @@ export function VenueDetail() {
                     <LocationOn sx={{ fontSize: 16, color: 'text.secondary' }} />
                     <Typography variant="body2" color="text.secondary" noWrap>{event.location}</Typography>
                   </Box>
-                  <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', mt: 1.5, mb: 1.5 }}>
-                    <HamburgerHalfCut sx={{ color: 'text.secondary', fontSize: 18, flexShrink: 0 }} />
+                  <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start', mt: 1.5, mb: 1.5 }}>
+                    <HamburgerHalfCut sx={{ color: 'text.secondary', fontSize: 16, mt: 0.3, flexShrink: 0 }} />
                     <Typography
                       variant="body2"
                       color="text.secondary"

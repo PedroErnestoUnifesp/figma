@@ -15,10 +15,28 @@ export function EventDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const theme = useTheme();
-  const [isSaved, setIsSaved] = useState(false);
+
+  const [bookmarkedIds, setBookmarkedIds] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('saved_event_ids');
+      return saved ? JSON.parse(saved) : ['1', '3'];
+    } catch {
+      return ['1', '3'];
+    }
+  });
 
   const event = events.find(e => e.id === id);
   if (!event) return <Box sx={{ p: 3 }}><Typography>Evento não encontrado</Typography></Box>;
+
+  const isSaved = bookmarkedIds.includes(event.id);
+
+  const handleToggleBookmark = () => {
+    setBookmarkedIds((prev) => {
+      const next = prev.includes(event.id) ? prev.filter((x) => x !== event.id) : [...prev, event.id];
+      localStorage.setItem('saved_event_ids', JSON.stringify(next));
+      return next;
+    });
+  };
 
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: theme.palette.background.default }}>
@@ -103,7 +121,7 @@ export function EventDetail() {
         <Button
           fullWidth variant="contained" size="large"
           startIcon={isSaved ? <Bookmark /> : <BookmarkBorder />}
-          onClick={() => setIsSaved(!isSaved)}
+          onClick={handleToggleBookmark}
           sx={{ bgcolor: isSaved ? '#4caf50' : '#ff4e00', py: 1.5, '&:hover': { bgcolor: isSaved ? '#45a049' : '#cc3d00' } }}
         >
           {isSaved ? 'Evento Salvo' : 'Salvar Evento'}

@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import { useThemeMode } from '../context/ThemeContext';
 import {
   Box, Typography, TextField, IconButton, Paper, Avatar,
   Chip, Card, CardContent, useTheme, SvgIcon
@@ -55,6 +56,8 @@ const getInitialMessages = (): Message[] => {
 export function Chat() {
   const navigate = useNavigate();
   const theme = useTheme();
+  const { userName } = useThemeMode();
+  const initialLetter = userName.trim().charAt(0).toUpperCase() || 'U';
   const [messages, setMessages] = useState<Message[]>(getInitialMessages);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -245,7 +248,7 @@ export function Chat() {
                 </Box>
               )}
             </Box>
-            {message.sender === 'user' && <Avatar sx={{ bgcolor: '#cc3d00' }}>U</Avatar>}
+            {message.sender === 'user' && <Avatar sx={{ bgcolor: '#cc3d00' }}>{initialLetter}</Avatar>}
           </Box>
         ))}
         {isTyping && (
